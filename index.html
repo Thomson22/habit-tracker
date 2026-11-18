@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="en" data-accent="emerald">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#059669" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Habit Tracker" />
+  <title>Daily Habit Tracker — Step 13</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root,
+    :root[data-accent="emerald"] {
+      --accent-soft: #ecfdf5;
+      --accent-soft-dark: rgba(6, 78, 59, 0.35);
+      --accent-pill-bg: #d1fae5;
+      --accent-pill-text: #065f46;
+      --accent-pill-bg-dark: rgba(6, 78, 59, 0.65);
+      --accent-pill-text-dark: #6ee7b7;
+      --accent-border: #a7f3d0;
+      --accent-border-dark: #065f46;
+      --accent-text: #059669;
+      --accent-text-dark: #34d399;
+      --accent-main: #059669;
+      --accent-hover: #047857;
+      --accent-bar: #10b981;
+      --accent-heat-1: #a7f3d0;
+      --accent-heat-2: #34d399;
+      --accent-heat-3: #059669;
+      --accent-heat-1-dark: #064e3b;
+      --accent-heat-2-dark: #047857;
+      --accent-heat-3-dark: #10b981;
+    }
+
+    :root[data-accent="blue"] {
+      --accent-soft: #eff6ff;
+      --accent-soft-dark: rgba(30, 58, 138, 0.35);
+      --accent-pill-bg: #dbeafe;
+      --accent-pill-text: #1e40af;
+      --accent-pill-bg-dark: rgba(30, 58, 138, 0.65);
+      --accent-pill-text-dark: #93c5fd;
+      --accent-border: #bfdbfe;
+      --accent-border-dark: #1e40af;
+      --accent-text: #2563eb;
+      --accent-text-dark: #60a5fa;
+      --accent-main: #2563eb;
+      --accent-hover: #1d4ed8;
+      --accent-bar: #3b82f6;
+      --accent-heat-1: #bfdbfe;
+      --accent-heat-2: #60a5fa;
+      --accent-heat-3: #2563eb;
+      --accent-heat-1-dark: #1e3a8a;
+      --accent-heat-2-dark: #1d4ed8;
+      --accent-heat-3-dark: #3b82f6;
+    }
+
+    :root[data-accent="violet"] {
+      --accent-soft: #f5f3ff;
+      --accent-soft-dark: rgba(76, 29, 149, 0.35);
+      --accent-pill-bg: #ede9fe;
+      --accent-pill-text: #5b21b6;
+      --accent-pill-bg-dark: rgba(76, 29, 149, 0.65);
+      --accent-pill-text-dark: #c4b5fd;
+      --accent-border: #ddd6fe;
+      --accent-border-dark: #5b21b6;
+      --accent-text: #7c3aed;
+      --accent-text-dark: #a78bfa;
+      --accent-main: #7c3aed;
+      --accent-hover: #6d28d9;
+      --accent-bar: #8b5cf6;
+      --accent-heat-1: #ddd6fe;
+      --accent-heat-2: #a78bfa;
+      --accent-heat-3: #7c3aed;
+      --accent-heat-1-dark: #4c1d95;
+      --accent-heat-2-dark: #6d28d9;
+      --accent-heat-3-dark: #8b5cf6;
+    }
+
+    :root[data-accent="coral"] {
+      --accent-soft: #fff1f2;
+      --accent-soft-dark: rgba(136, 19, 55, 0.35);
+      --accent-pill-bg: #ffe4e6;
+      --accent-pill-text: #9f1239;
+      --accent-pill-bg-dark: rgba(136, 19, 55, 0.65);
+      --accent-pill-text-dark: #fda4af;
+      --accent-border: #fecdd3;
+      --accent-border-dark: #9f1239;
+      --accent-text: #e11d48;
+      --accent-text-dark: #fb7185;
+      --accent-main: #e11d48;
+      --accent-hover: #be123c;
+      --accent-bar: #f43f5e;
+      --accent-heat-1: #fecdd3;
+      --accent-heat-2: #fb7185;
+      --accent-heat-3: #e11d48;
+      --accent-heat-1-dark: #881337;
+      --accent-heat-2-dark: #be123c;
+      --accent-heat-3-dark: #f43f5e;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .habit-card {
+      transition: transform 0.12s ease, background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .habit-card:active {
+      transform: scale(0.99);
+    }
+
+    /* Accent utility classes powered by CSS variables */
+    .accent-text { color: var(--accent-text); }
+    .dark .accent-text { color: var(--accent-text-dark); }
+
+    .accent-bg { background-color: var(--accent-main); color: #ffffff; }
+    .accent-bg:hover { background-color: var(--accent-hover); }
+
+    .accent-bar { background-color: var(--accent-bar); }
+
+    .accent-pill {
+      background-color: var(--accent-pill-bg);
+      color: var(--accent-pill-text);
+    }
+    .dark .accent-pill {
+      background-color: var(--accent-pill-bg-dark);
+      color: var(--accent-pill-text-dark);
+    }
+
+    .accent-card-done {
+      background-color: var(--accent-soft);
+      border-color: var(--accent-border);
+    }
+    .dark .accent-card-done {
+      background-color: var(--accent-soft-dark);
+      border-color: var(--accent-border-dark);
+    }
+
+    .accent-today-outline {
+      background-color: var(--accent-soft);
+      border-color: var(--accent-border);
+      color: var(--accent-text);
+    }
+    .dark .accent-today-outline {
+      background-color: var(--accent-soft-dark);
+      border-color: var(--accent-border-dark);
+      color: var(--accent-text-dark);
+    }
+
+    .heat-1 { background-color: var(--accent-heat-1); color: #0f172a; }
+    .heat-2 { background-color: var(--accent-heat-2); color: #0f172a; }
+    .heat-3 { background-color: var(--accent-heat-3); color: #ffffff; }
+    .dark .heat-1 { background-color: var(--accent-heat-1-dark); color: #e2e8f0; }
+    .dark .heat-2 { background-color: var(--accent-heat-2-dark); color: #f8fafc; }
+    .dark .heat-3 { background-color: var(--accent-heat-3-dark); color: #0f172a; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
+  <main class="mx-auto max-w-md px-4 py-8 pb-24 sm:py-12">
+    <!-- Header -->
+    <header class="mb-5">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p id="today-date" class="accent-text text-xs font-semibold uppercase tracking-wider"></p>
+          <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Daily Habit Tracker</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="accent-pill inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold">
+            v12
+          </span>
+          <button
+            id="theme-toggle"
+            type="button"
+            aria-label="Toggle dark mode"
+            aria-pressed="false"
+            class="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-100 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-amber-300 dark:hover:bg-slate-800"
+          >
+            <svg id="icon-moon" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+            </svg>
+            <svg id="icon-sun" class="hidden h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Subtitle + Accent Theme Swatches -->
+      <div class="mt-2 flex flex-wrap items-center justify-between gap-2">
+        <p class="text-xs text-slate-500 dark:text-slate-400">Tap a habit for today, or any day below.</p>
+        <div id="accent-picker" class="flex items-center gap-1.5" role="group" aria-label="Accent color theme">
+          <button type="button" data-accent-choice="emerald" aria-label="Emerald theme" class="h-5 w-5 rounded-full bg-emerald-500 transition hover:scale-110"></button>
+          <button type="button" data-accent-choice="blue" aria-label="Ocean blue theme" class="h-5 w-5 rounded-full bg-blue-500 transition hover:scale-110"></button>
+          <button type="button" data-accent-choice="violet" aria-label="Violet theme" class="h-5 w-5 rounded-full bg-violet-500 transition hover:scale-110"></button>
+          <button type="button" data-accent-choice="coral" aria-label="Coral theme" class="h-5 w-5 rounded-full bg-rose-500 transition hover:scale-110"></button>
+        </div>
+      </div>
+    </header>
+
+    <!-- View Tabs -->
+    <div class="mb-5 grid grid-cols-2 gap-1.5 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm dark:border-slate-800 dark:bg-slate-900" role="tablist" aria-label="App views">
+      <button
+        id="tab-today"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        data-view="today"
+        class="accent-bg rounded-xl px-3 py-2 text-xs font-semibold shadow-sm transition"
+      >
+        Today
+      </button>
+      <button
+        id="tab-summary"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        data-view="summary"
+        class="rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+      >
+        Weekly Summary
+      </button>
+    </div>
+
+    <!-- TODAY VIEW -->
+    <div id="view-today">
+      <!-- Focus Timer Card (opens when you tap Timer on any habit) -->
+      <section id="timer-card" class="mb-5 hidden rounded-2xl border-2 border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900" aria-label="Focus timer">
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <p class="accent-text text-[11px] font-semibold uppercase tracking-wider">Focus Timer</p>
+            <p id="timer-habit-name" class="truncate text-sm font-bold text-slate-800 dark:text-slate-100"></p>
+          </div>
+          <button
+            id="timer-close-btn"
+            type="button"
+            aria-label="Close timer"
+            class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="mt-3 flex items-center justify-between gap-3">
+          <span id="timer-display" class="font-mono text-3xl font-bold tracking-tight text-slate-900 dark:text-white">10:00</span>
+          <div class="flex items-center gap-1.5">
+            <button id="timer-start-btn" type="button" class="accent-bg rounded-xl px-4 py-2 text-xs font-semibold shadow-sm transition">
+              Start
+            </button>
+            <button id="timer-reset-btn" type="button" class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">
+              Reset
+            </button>
+          </div>
+        </div>
+        <div class="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div id="timer-bar" class="accent-bar h-full rounded-full transition-all duration-300" style="width: 100%"></div>
+        </div>
+        <div id="timer-presets" class="mt-3 flex items-center gap-1.5">
+          <span class="text-[11px] font-medium text-slate-400 dark:text-slate-500">Presets:</span>
+          <button type="button" data-minutes="5" class="rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">5m</button>
+          <button type="button" data-minutes="10" class="rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">10m</button>
+          <button type="button" data-minutes="15" class="rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">15m</button>
+          <button type="button" data-minutes="25" class="rounded-lg bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">25m</button>
+        </div>
+      </section>
+
+      <!-- Progress Card -->
+      <section class="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900" aria-label="Today's progress">
+        <div class="flex items-baseline justify-between gap-2">
+          <span id="progress-text" class="text-sm font-semibold text-slate-700 dark:text-slate-200">0 of 0 completed</span>
+          <div class="flex items-center gap-2.5">
+            <span id="best-streak-badge" class="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-950/70 dark:text-amber-300">Best: 0d</span>
+            <span id="progress-percent" class="accent-text text-lg font-bold">0%</span>
+          </div>
+        </div>
+        <div class="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div
+            id="progress-bar"
+            class="accent-bar h-full rounded-full transition-all duration-300 ease-out"
+            style="width: 0%"
+          ></div>
+        </div>
+        <p id="all-done-banner" class="accent-pill mt-3 hidden rounded-xl px-3 py-2 text-center text-xs font-semibold">
+          All habits completed for today! Great job.
+        </p>
+      </section>
+
+      <!-- Add Habit Form -->
+      <form id="habit-form" class="mb-5 space-y-2.5" novalidate>
+        <label for="habit-input" class="sr-only">Add a new habit</label>
+        <input
+          id="habit-input"
+          type="text"
+          maxlength="60"
+          placeholder="Add a new habit (e.g. Meditate 5 min)"
+          class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 shadow-sm focus:border-slate-400 focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500 dark:focus:border-slate-600"
+        />
+        <div class="flex items-center gap-2">
+          <label for="habit-category" class="sr-only">Category</label>
+          <select
+            id="habit-category"
+            class="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-700 shadow-sm focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+          ></select>
+          <label for="habit-goal" class="sr-only">Weekly goal</label>
+          <select
+            id="habit-goal"
+            class="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-700 shadow-sm focus:outline-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200"
+          >
+            <option value="7">Daily (7x/wk)</option>
+            <option value="6">6x / week</option>
+            <option value="5">5x / week</option>
+            <option value="4">4x / week</option>
+            <option value="3">3x / week</option>
+            <option value="2">2x / week</option>
+            <option value="1">1x / week</option>
+          </select>
+          <button
+            type="submit"
+            class="accent-bg shrink-0 rounded-xl px-5 py-2.5 text-sm font-semibold shadow-sm transition focus:outline-none"
+          >
+            Add
+          </button>
+        </div>
+        <p id="form-error" class="hidden text-xs font-medium text-rose-600 dark:text-rose-400" role="alert">
+          Please enter a habit name first.
+        </p>
+      </form>
+
+      <!-- Category Filter Bar + Custom Category Creator -->
+      <div class="mb-4 space-y-2">
+        <nav id="filter-bar" class="flex flex-wrap items-center gap-1.5" aria-label="Filter by category"></nav>
+        <form id="custom-cat-form" class="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <label for="custom-cat-input" class="sr-only">New category name</label>
+          <input
+            id="custom-cat-input"
+            type="text"
+            maxlength="20"
+            placeholder="New category (e.g. Study, Fitness)"
+            class="min-w-0 flex-1 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+          />
+          <button
+            type="submit"
+            class="accent-bg shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold"
+          >
+            Create
+          </button>
+          <button
+            id="cancel-cat-btn"
+            type="button"
+            class="shrink-0 rounded-lg px-2 py-1.5 text-xs font-medium text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+          >
+            Cancel
+          </button>
+        </form>
+      </div>
+
+      <!-- Active Habit List -->
+      <section aria-label="Habits list">
+        <ul id="habit-list" class="space-y-2.5"></ul>
+        <div id="empty-state" class="hidden rounded-2xl border border-dashed border-slate-300 bg-white px-5 py-8 text-center dark:border-slate-700 dark:bg-slate-900">
+          <p id="empty-title" class="text-sm font-medium text-slate-600 dark:text-slate-300">No active habits yet.</p>
+          <p id="empty-subtitle" class="mt-1 text-xs text-slate-400 dark:text-slate-500">Add your first habit above to get started.</p>
+          <button
+            id="reset-filter-btn"
+            type="button"
+            class="accent-pill mt-3 hidden rounded-lg px-3 py-1.5 text-xs font-semibold"
+          >
+            Show all categories
+          </button>
+        </div>
+      </section>
+
+      <!-- Archived Habits Drawer -->
+      <section id="archived-section" class="mt-5 hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900" aria-label="Archived habits">
+        <button
+          id="archived-toggle-btn"
+          type="button"
+          aria-expanded="false"
+          class="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-xs font-semibold text-slate-600 transition hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800/60"
+        >
+          <span id="archived-toggle-label">Archived habits (0)</span>
+          <svg id="archived-chevron" class="h-4 w-4 text-slate-400 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <ul id="archived-list" class="hidden divide-y divide-slate-100 border-t border-slate-100 px-4 py-1 dark:divide-slate-800 dark:border-slate-800"></ul>
+      </section>
+
+      <!-- Daily Reflection Note -->
+      <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900" aria-label="Today's reflection note">
+        <div class="mb-2 flex items-center justify-between gap-2">
+          <label for="daily-note-input" class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+            Today's Reflection
+          </label>
+          <span id="note-status" class="accent-text text-[11px] font-medium opacity-0 transition-opacity duration-200">
+            Saved
+          </span>
+        </div>
+        <textarea
+          id="daily-note-input"
+          rows="2"
+          maxlength="300"
+          placeholder="Jot down a quick win, mood, or blocker for today..."
+          class="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-100 dark:placeholder-slate-500 dark:focus:bg-slate-950"
+        ></textarea>
+      </section>
+    </div>
+
+    <!-- WEEKLY SUMMARY VIEW -->
+    <section id="view-summary" class="hidden space-y-5" aria-label="Weekly summary">
+      <!-- KPI Row -->
+      <div class="grid grid-cols-3 gap-2.5">
+        <div class="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">7-Day Check-ins</p>
+          <p id="summary-checkins" class="mt-1 text-xl font-bold text-slate-900 dark:text-white">0</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Goals Met</p>
+          <p id="summary-goals-met" class="accent-text mt-1 text-xl font-bold">0/0</p>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-3.5 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+          <p class="text-[11px] font-medium text-slate-500 dark:text-slate-400">Goal Rate</p>
+          <p id="summary-rate" class="mt-1 text-xl font-bold text-amber-600 dark:text-amber-400">0%</p>
+        </div>
+      </div>
+
+      <!-- 7-Day Activity Bar Chart -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Last 7 Days Activity</h2>
+          <span class="text-xs text-slate-400 dark:text-slate-500">Habits done / day</span>
+        </div>
+        <div id="weekly-chart" class="grid h-36 grid-cols-7 items-end gap-2"></div>
+      </div>
+
+      <!-- 30-Day Activity Heatmap -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div class="mb-3 flex items-center justify-between gap-2">
+          <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">30-Day Heatmap</h2>
+          <div class="flex items-center gap-1 text-[10px] text-slate-400 dark:text-slate-500">
+            <span>Less</span>
+            <span class="h-2.5 w-2.5 rounded-sm bg-slate-100 dark:bg-slate-800"></span>
+            <span class="heat-1 h-2.5 w-2.5 rounded-sm"></span>
+            <span class="heat-2 h-2.5 w-2.5 rounded-sm"></span>
+            <span class="heat-3 h-2.5 w-2.5 rounded-sm"></span>
+            <span>More</span>
+          </div>
+        </div>
+        <div id="heatmap-grid" class="grid grid-cols-10 gap-1.5"></div>
+        <p id="heatmap-detail" class="mt-3 text-center text-xs font-medium text-slate-500 dark:text-slate-400">
+          Tap any square to inspect that day's progress.
+        </p>
+      </div>
+
+      <!-- Per-Habit Goal Breakdown -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 class="mb-3.5 text-sm font-semibold text-slate-800 dark:text-slate-100">Weekly Goal Progress</h2>
+        <ul id="summary-habit-list" class="space-y-3.5"></ul>
+        <p id="summary-empty" class="hidden py-4 text-center text-xs text-slate-400 dark:text-slate-500">
+          Add some active habits on the Today tab to see your weekly breakdown.
+        </p>
+      </div>
+
+      <!-- Milestone Badges -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div class="mb-3.5 flex items-center justify-between gap-2">
+          <h2 class="text-sm font-semibold text-slate-800 dark:text-slate-100">Milestone Badges</h2>
+          <span id="badges-count" class="accent-pill rounded-full px-2.5 py-0.5 text-[11px] font-semibold">0/6 unlocked</span>
+        </div>
+        <div id="badges-grid" class="grid grid-cols-2 gap-2.5"></div>
+      </div>
+
+      <!-- Recent Reflections -->
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 class="mb-3 text-sm font-semibold text-slate-800 dark:text-slate-100">Recent Reflections</h2>
+        <ul id="summary-notes-list" class="space-y-2.5"></ul>
+        <p id="summary-notes-empty" class="hidden py-2 text-center text-xs text-slate-400 dark:text-slate-500">
+          No reflections saved in the last 7 days yet.
+        </p>
+      </div>
+    </section>
+
+    <!-- Backup & Transfer Footer -->
+    <footer class="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Backup &amp; Transfer</h2>
+          <p class="mt-0.5 text-xs text-slate-400 dark:text-slate-500">Move your habits, tags &amp; notes between devices.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="export-csv-btn"
+            type="button"
+            class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          >
+            Export CSV
+          </button>
+          <button
+            id="export-btn"
+            type="button"
+            class="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          >
+            Export JSON
+          </button>
+          <button
+            id="import-btn"
+            type="button"
+            class="accent-pill rounded-xl px-3 py-2 text-xs font-semibold transition"
+          >
+            Import JSON
+          </button>
+          <input id="import-file-input" type="file" accept=".json,application/json" class="hidden" />
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Toast Notification with Optional Undo -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="pointer-events-none fixed bottom-5 left-1/2 z-50 flex -translate-x-1/2 translate-y-4 items-center gap-3 rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white opacity-0 shadow-lg transition-all duration-200 dark:bg-slate-100 dark:text-slate-900"
+  >
+    <span id="toast-message"></span>
+    <button
+      id="toast-undo-btn"
+      type="button"
+      class="hidden rounded-lg bg-white/15 px-2.5 py-1 text-xs font-bold text-amber-300 transition hover:bg-white/25 dark:bg-slate-900/10 dark:text-emerald-700 dark:hover:bg-slate-900/20"
+    >
+      Undo
+    </button>
+  </div>
+
+  <script>
+    // 1. DATE HELPERS
+    function getDateKey(date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getLastNDays(n) {
+      const days = [];
+      const now = new Date();
+      for (let offset = n - 1; offset >= 0; offset--) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offset);
+        days.push({
+          key: getDateKey(d),
+          weekday: d.toLocaleDateString(undefined, { weekday: 'narrow' }),
+          shortDay: d.toLocaleDateString(undefined, { weekday: 'short' }),
+          niceDate: d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }),
+          dayNum: d.getDate(),
+          isToday: offset === 0
+        });
+      }
+      return days;
+    }
+
+    function getStreak(completedDates) {
+      const dateSet = new Set(completedDates);
+      const now = new Date();
+      const todayKey = getDateKey(now);
+      const yesterday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+      const yesterdayKey = getDateKey(yesterday);
+
+      let offset = dateSet.has(todayKey) ? 0 : dateSet.has(yesterdayKey) ? 1 : -1;
+      if (offset === -1) return 0;
+
+      let streak = 0;
+      while (true) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - offset);
+        if (dateSet.has(getDateKey(d))) {
+          streak += 1;
+          offset += 1;
+        } else {
+          break;
+        }
+      }
+      return streak;
+    }
+
+    function getLongestStreak(completedDates) {
+      if (!completedDates || completedDates.length === 0) return 0;
+      const sorted = [...new Set(completedDates)].sort();
+      let best = 1;
+      let run = 1;
+      for (let i = 1; i < sorted.length; i++) {
+        const prev = new Date(sorted[i - 1] + 'T00:00:00');
+        const curr = new Date(sorted[i] + 'T00:00:00');
+        const diffDays = Math.round((curr - prev) / 86400000);
+        if (diffDays === 1) {
+          run += 1;
+          if (run > best) best = run;
+        } else {
+          run = 1;
+        }
+      }
+      return best;
+    }
+
+    function getWeeklyCount(completedDates, last7KeysSet) {
+      return completedDates.filter((d) => last7KeysSet.has(d)).length;
+    }
+
+    // 2. CATEGORIES, ACCENTS, DATA & STORAGE
+    const DEFAULT_CATEGORIES = ['Health', 'Focus', 'Personal'];
+    const CATEGORY_PALETTE = [
+      'bg-teal-100 text-teal-800 dark:bg-teal-950 dark:text-teal-300',
+      'bg-indigo-100 text-indigo-800 dark:bg-indigo-950 dark:text-indigo-300',
+      'bg-purple-100 text-purple-800 dark:bg-purple-950 dark:text-purple-300',
+      'bg-sky-100 text-sky-800 dark:bg-sky-950 dark:text-sky-300',
+      'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300',
+      'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
+      'bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-950 dark:text-fuchsia-300'
+    ];
+    const ACCENT_HEX = {
+      emerald: '#059669',
+      blue: '#2563eb',
+      violet: '#7c3aed',
+      coral: '#e11d48'
+    };
+
+    const STORAGE_KEY = 'daily_habit_tracker_v6';
+    const LEGACY_KEYS = ['daily_habit_tracker_v4', 'daily_habit_tracker_v3', 'daily_habit_tracker_v2'];
+    const CATEGORIES_KEY = 'daily_habit_tracker_categories_v1';
+    const NOTES_KEY = 'daily_habit_tracker_notes_v1';
+    const THEME_KEY = 'daily_habit_tracker_theme';
+    const ACCENT_KEY = 'daily_habit_tracker_accent';
+    const BADGES_KEY = 'daily_habit_tracker_unlocked_badges_v1';
+
+    const DEFAULT_HABITS = [
+      { id: 1, name: 'Drink 8 glasses of water', category: 'Health', weeklyGoal: 7, archived: false, completedDates: [] },
+      { id: 2, name: 'Read for 15 minutes', category: 'Focus', weeklyGoal: 5, archived: false, completedDates: [] },
+      { id: 3, name: 'Take a 20-minute walk', category: 'Health', weeklyGoal: 4, archived: false, completedDates: [] }
+    ];
+
+    function loadCategories() {
+      try {
+        const saved = localStorage.getItem(CATEGORIES_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const clean = parsed.map((c) => String(c).trim()).filter(Boolean);
+            return [...new Set([...DEFAULT_CATEGORIES, ...clean])];
+          }
+        }
+      } catch (err) {
+        // Fallback
+      }
+      return [...DEFAULT_CATEGORIES];
+    }
+
+    function saveCategories() {
+      try {
+        localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
+      } catch (err) {
+        // Ignore
+      }
+    }
+
+    let categories = loadCategories();
+
+    function getCategoryBadgeClass(cat) {
+      const idx = categories.indexOf(cat);
+      if (idx >= 0) return CATEGORY_PALETTE[idx % CATEGORY_PALETTE.length];
+      return CATEGORY_PALETTE[2];
+    }
+
+    function clampGoal(val) {
+      const n = Number(val);
+      if (!Number.isFinite(n)) return 7;
+      return Math.min(7, Math.max(1, Math.round(n)));
+    }
+
+    function normalizeHabit(item, index = 0) {
+      const rawCat = String(item.category || '').trim().slice(0, 20);
+      const category = rawCat || 'Personal';
+      if (!categories.includes(category)) {
+        categories.push(category);
+      }
+      const id = typeof item.id === 'number' && !Number.isNaN(item.id) ? item.id : Date.now() + index;
+      const name = String(item.name || '').trim().slice(0, 60);
+      const weeklyGoal = clampGoal(item.weeklyGoal !== undefined ? item.weeklyGoal : 7);
+      const archived = Boolean(item.archived);
+
+      if (Array.isArray(item.completedDates)) {
+        const validDates = item.completedDates.filter((d) => typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d));
+        return { id, name, category, weeklyGoal, archived, completedDates: [...new Set(validDates)] };
+      }
+      const migratedDates = item.done ? [getDateKey(new Date())] : [];
+      return { id, name, category, weeklyGoal, archived, completedDates: migratedDates };
+    }
+
+    function loadHabits() {
+      try {
+        let saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) {
+          for (const key of LEGACY_KEYS) {
+            saved = localStorage.getItem(key);
+            if (saved) break;
+          }
+        }
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) {
+            return parsed.map((item, i) => normalizeHabit(item, i)).filter((h) => h.name.length > 0);
+          }
+        }
+      } catch (err) {
+        // Fallback
+      }
+      return DEFAULT_HABITS.map((h) => ({ ...h, completedDates: [...h.completedDates] }));
+    }
+
+    function saveHabits() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
+      } catch (err) {
+        // Ignore
+      }
+    }
+
+    function loadNotes() {
+      try {
+        const saved = localStorage.getItem(NOTES_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+        }
+      } catch (err) {
+        // Fallback
+      }
+      return {};
+    }
+
+    function saveNotes() {
+      try {
+        localStorage.setItem(NOTES_KEY, JSON.stringify(dailyNotes));
+      } catch (err) {
+        // Ignore
+      }
+    }
+
+    let habits = loadHabits();
+    let dailyNotes = loadNotes();
+    let activeFilter = 'All';
+    let activeView = 'today';
+    let editingId = null;
+    let archivedOpen = false;
+    let selectedHeatmapKey = null;
+    let lastDeleted = null;
+    let toastTimer = null;
+    let noteStatusTimer = null;
+
+    function loadSeenBadges() {
+      try {
+        const saved = localStorage.getItem(BADGES_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return new Set(parsed);
+        }
+      } catch (err) {
+        // Fallback
+      }
+      return new Set();
+    }
+
+    function saveSeenBadges(set) {
+      try {
+        localStorage.setItem(BADGES_KEY, JSON.stringify([...set]));
+      } catch (err) {
+        // Ignore
+      }
+    }
+
+    let seenBadges = loadSeenBadges();
+
+    // 3. ELEMENTS
+    const todayDateEl = document.getElementById('today-date');
+    const accentPickerEl = document.getElementById('accent-picker');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const tabTodayBtn = document.getElementById('tab-today');
+    const tabSummaryBtn = document.getElementById('tab-summary');
+    const viewTodayEl = document.getElementById('view-today');
+    const viewSummaryEl = document.getElementById('view-summary');
+    const progressTextEl = document.getElementById('progress-text');
+    const bestStreakBadgeEl = document.getElementById('best-streak-badge');
+    const progressPercentEl = document.getElementById('progress-percent');
+    const progressBarEl = document.getElementById('progress-bar');
+    const allDoneBannerEl = document.getElementById('all-done-banner');
+    const habitForm = document.getElementById('habit-form');
+    const habitInput = document.getElementById('habit-input');
+    const habitCategorySelect = document.getElementById('habit-category');
+    const habitGoalSelect = document.getElementById('habit-goal');
+    const formErrorEl = document.getElementById('form-error');
+    const filterBarEl = document.getElementById('filter-bar');
+    const customCatForm = document.getElementById('custom-cat-form');
+    const customCatInput = document.getElementById('custom-cat-input');
+    const cancelCatBtn = document.getElementById('cancel-cat-btn');
+    const habitListEl = document.getElementById('habit-list');
+    const emptyStateEl = document.getElementById('empty-state');
+    const emptyTitleEl = document.getElementById('empty-title');
+    const emptySubtitleEl = document.getElementById('empty-subtitle');
+    const resetFilterBtn = document.getElementById('reset-filter-btn');
+    const archivedSectionEl = document.getElementById('archived-section');
+    const archivedToggleBtn = document.getElementById('archived-toggle-btn');
+    const archivedToggleLabelEl = document.getElementById('archived-toggle-label');
+    const archivedChevronEl = document.getElementById('archived-chevron');
+    const archivedListEl = document.getElementById('archived-list');
+    const dailyNoteInput = document.getElementById('daily-note-input');
+    const noteStatusEl = document.getElementById('note-status');
+    const summaryCheckinsEl = document.getElementById('summary-checkins');
+    const summaryGoalsMetEl = document.getElementById('summary-goals-met');
+    const summaryRateEl = document.getElementById('summary-rate');
+    const weeklyChartEl = document.getElementById('weekly-chart');
+    const heatmapGridEl = document.getElementById('heatmap-grid');
+    const heatmapDetailEl = document.getElementById('heatmap-detail');
+    const summaryHabitListEl = document.getElementById('summary-habit-list');
+    const summaryEmptyEl = document.getElementById('summary-empty');
+    const badgesCountEl = document.getElementById('badges-count');
+    const badgesGridEl = document.getElementById('badges-grid');
+    const summaryNotesListEl = document.getElementById('summary-notes-list');
+    const summaryNotesEmptyEl = document.getElementById('summary-notes-empty');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const iconMoonEl = document.getElementById('icon-moon');
+    const iconSunEl = document.getElementById('icon-sun');
+    const timerCardEl = document.getElementById('timer-card');
+    const timerHabitNameEl = document.getElementById('timer-habit-name');
+    const timerCloseBtn = document.getElementById('timer-close-btn');
+    const timerDisplayEl = document.getElementById('timer-display');
+    const timerStartBtn = document.getElementById('timer-start-btn');
+    const timerResetBtn = document.getElementById('timer-reset-btn');
+    const timerBarEl = document.getElementById('timer-bar');
+    const timerPresetsEl = document.getElementById('timer-presets');
+    const exportCsvBtn = document.getElementById('export-csv-btn');
+    const exportBtn = document.getElementById('export-btn');
+    const importBtn = document.getElementById('import-btn');
+    const importFileInput = document.getElementById('import-file-input');
+    const toastEl = document.getElementById('toast');
+    const toastMessageEl = document.getElementById('toast-message');
+    const toastUndoBtn = document.getElementById('toast-undo-btn');
+
+    todayDateEl.textContent = new Date().toLocaleDateString(undefined, {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric'
+    });
+
+    function getActiveHabits() {
+      return habits.filter((h) => !h.archived);
+    }
+
+    function getArchivedHabits() {
+      return habits.filter((h) => h.archived);
+    }
+
+    // 4. TOAST + ONE-TAP UNDO
+    function hideToast() {
+      toastEl.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+      toastEl.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+    }
+
+    function showToast(message, options = {}) {
+      const { canUndo = false, duration = 2400 } = options;
+      toastMessageEl.textContent = message;
+      toastUndoBtn.classList.toggle('hidden', !canUndo);
+
+      toastEl.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+      toastEl.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        hideToast();
+        if (canUndo) lastDeleted = null;
+      }, duration);
+    }
+
+    toastUndoBtn.addEventListener('click', () => {
+      if (!lastDeleted) return;
+      const { habit, index } = lastDeleted;
+      const insertAt = Math.min(Math.max(0, index), habits.length);
+      habits.splice(insertAt, 0, habit);
+      lastDeleted = null;
+      saveHabits();
+      renderHabits();
+      showToast('Habit restored');
+    });
+
+    // 5. DAILY NOTE
+    function initTodayNote() {
+      const todayKey = getDateKey(new Date());
+      dailyNoteInput.value = dailyNotes[todayKey] || '';
+    }
+
+    dailyNoteInput.addEventListener('input', () => {
+      const todayKey = getDateKey(new Date());
+      const text = dailyNoteInput.value.trim();
+      if (text) {
+        dailyNotes[todayKey] = dailyNoteInput.value;
+      } else {
+        delete dailyNotes[todayKey];
+      }
+      saveNotes();
+      checkNewBadgeUnlocks(true);
+
+      noteStatusEl.classList.remove('opacity-0');
+      noteStatusEl.classList.add('opacity-100');
+      if (noteStatusTimer) clearTimeout(noteStatusTimer);
+      noteStatusTimer = setTimeout(() => {
+        noteStatusEl.classList.remove('opacity-100');
+        noteStatusEl.classList.add('opacity-0');
+      }, 1500);
+    });
+
+    // 6. DARK MODE & ACCENT THEME
+    function applyTheme(isDark) {
+      document.documentElement.classList.toggle('dark', isDark);
+      themeToggleBtn.setAttribute('aria-pressed', String(isDark));
+      iconMoonEl.classList.toggle('hidden', isDark);
+      iconSunEl.classList.toggle('hidden', !isDark);
+    }
+
+    function initTheme() {
+      let isDark = false;
+      try {
+        isDark = localStorage.getItem(THEME_KEY) === 'dark';
+      } catch (err) {
+        isDark = false;
+      }
+      applyTheme(isDark);
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const nextDark = !document.documentElement.classList.contains('dark');
+      applyTheme(nextDark);
+      try {
+        localStorage.setItem(THEME_KEY, nextDark ? 'dark' : 'light');
+      } catch (err) {
+        // Ignore
+      }
+    });
+
+    function applyAccent(accent) {
+      const valid = Object.prototype.hasOwnProperty.call(ACCENT_HEX, accent) ? accent : 'emerald';
+      document.documentElement.setAttribute('data-accent', valid);
+      if (themeColorMeta) themeColorMeta.setAttribute('content', ACCENT_HEX[valid]);
+
+      accentPickerEl.querySelectorAll('button[data-accent-choice]').forEach((btn) => {
+        const selected = btn.dataset.accentChoice === valid;
+        btn.setAttribute('aria-pressed', String(selected));
+        btn.classList.toggle('ring-2', selected);
+        btn.classList.toggle('ring-offset-2', selected);
+        btn.classList.toggle('ring-slate-900', selected);
+        btn.classList.toggle('dark:ring-white', selected);
+        btn.classList.toggle('dark:ring-offset-slate-950', selected);
+      });
+    }
+
+    function initAccent() {
+      let savedAccent = 'emerald';
+      try {
+        savedAccent = localStorage.getItem(ACCENT_KEY) || 'emerald';
+      } catch (err) {
+        savedAccent = 'emerald';
+      }
+      applyAccent(savedAccent);
+    }
+
+    accentPickerEl.addEventListener('click', (event) => {
+      const btn = event.target.closest('button[data-accent-choice]');
+      if (!btn) return;
+      const choice = btn.dataset.accentChoice;
+      applyAccent(choice);
+      try {
+        localStorage.setItem(ACCENT_KEY, choice);
+      } catch (err) {
+        // Ignore
+      }
+    });
+
+    // 7. VIEW SWITCHER
+    function setActiveView(view) {
+      activeView = view;
+      const isToday = view === 'today';
+
+      viewTodayEl.classList.toggle('hidden', !isToday);
+      viewSummaryEl.classList.toggle('hidden', isToday);
+
+      tabTodayBtn.setAttribute('aria-selected', String(isToday));
+      tabSummaryBtn.setAttribute('aria-selected', String(!isToday));
+
+      const activeClasses = 'accent-bg rounded-xl px-3 py-2 text-xs font-semibold shadow-sm transition';
+      const inactiveClasses = 'rounded-xl px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800';
+
+      tabTodayBtn.className = isToday ? activeClasses : inactiveClasses;
+      tabSummaryBtn.className = !isToday ? activeClasses : inactiveClasses;
+
+      if (!isToday) {
+        renderWeeklySummary();
+      }
+    }
+
+    tabTodayBtn.addEventListener('click', () => setActiveView('today'));
+    tabSummaryBtn.addEventListener('click', () => setActiveView('summary'));
+
+    // 8. CATEGORY SELECT & CUSTOM CATEGORY CREATOR
+    function renderCategorySelect() {
+      const prevValue = habitCategorySelect.value;
+      habitCategorySelect.innerHTML = '';
+      categories.forEach((cat) => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        habitCategorySelect.appendChild(opt);
+      });
+      if (categories.includes(prevValue)) {
+        habitCategorySelect.value = prevValue;
+      }
+    }
+
+    function renderFilters() {
+      const activeList = getActiveHabits();
+      filterBarEl.innerHTML = '';
+      const options = ['All', ...categories];
+
+      options.forEach((cat) => {
+        const count = cat === 'All'
+          ? activeList.length
+          : activeList.filter((h) => h.category === cat).length;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.filter = cat;
+        btn.setAttribute('aria-pressed', String(activeFilter === cat));
+        btn.textContent = `${cat} (${count})`;
+        btn.className = activeFilter === cat
+          ? 'accent-bg rounded-full px-3 py-1 text-xs font-semibold transition'
+          : 'rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 transition hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800';
+
+        filterBarEl.appendChild(btn);
+      });
+
+      const addTagBtn = document.createElement('button');
+      addTagBtn.type = 'button';
+      addTagBtn.dataset.action = 'open-new-cat';
+      addTagBtn.textContent = '+ Tag';
+      addTagBtn.className =
+        'rounded-full border border-dashed border-slate-300 px-2.5 py-1 text-xs font-semibold text-slate-500 transition hover:border-slate-500 hover:text-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-500 dark:hover:text-slate-200';
+      filterBarEl.appendChild(addTagBtn);
+    }
+
+    customCatForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const raw = customCatInput.value.trim();
+      if (!raw) {
+        showToast('Enter a category name');
+        customCatInput.focus();
+        return;
+      }
+      const existing = categories.find((c) => c.toLowerCase() === raw.toLowerCase());
+      if (existing) {
+        habitCategorySelect.value = existing;
+        customCatInput.value = '';
+        customCatForm.classList.add('hidden');
+        customCatForm.classList.remove('flex');
+        showToast(`"${existing}" already exists`);
+        return;
+      }
+
+      const formatted = raw.charAt(0).toUpperCase() + raw.slice(1);
+      categories.push(formatted);
+      saveCategories();
+      renderCategorySelect();
+      habitCategorySelect.value = formatted;
+      customCatInput.value = '';
+      customCatForm.classList.add('hidden');
+      customCatForm.classList.remove('flex');
+      renderHabits();
+      showToast(`Added "${formatted}" category`);
+    });
+
+    cancelCatBtn.addEventListener('click', () => {
+      customCatInput.value = '';
+      customCatForm.classList.add('hidden');
+      customCatForm.classList.remove('flex');
+    });
+
+    // 9. RENDER TODAY VIEW + ARCHIVED DRAWER
+    function renderEditCard(habit) {
+      const li = document.createElement('li');
+      li.className = 'rounded-2xl border-2 border-slate-400 bg-white p-3.5 shadow-sm dark:border-slate-500 dark:bg-slate-900';
+
+      const form = document.createElement('form');
+      form.dataset.editForm = String(habit.id);
+      form.className = 'space-y-2.5';
+
+      const nameInput = document.createElement('input');
+      nameInput.type = 'text';
+      nameInput.name = 'editName';
+      nameInput.maxLength = 60;
+      nameInput.value = habit.name;
+      nameInput.setAttribute('aria-label', 'Edit habit name');
+      nameInput.className =
+        'w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white';
+
+      const selectsRow = document.createElement('div');
+      selectsRow.className = 'grid grid-cols-2 gap-2';
+
+      const catSelect = document.createElement('select');
+      catSelect.name = 'editCategory';
+      catSelect.setAttribute('aria-label', 'Edit habit category');
+      catSelect.className =
+        'rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200';
+      categories.forEach((cat) => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = cat;
+        if (cat === habit.category) opt.selected = true;
+        catSelect.appendChild(opt);
+      });
+
+      const goalSelect = document.createElement('select');
+      goalSelect.name = 'editGoal';
+      goalSelect.setAttribute('aria-label', 'Edit weekly goal');
+      goalSelect.className =
+        'rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200';
+      for (let g = 7; g >= 1; g--) {
+        const opt = document.createElement('option');
+        opt.value = String(g);
+        opt.textContent = g === 7 ? 'Daily (7x/wk)' : `${g}x / week`;
+        if (g === habit.weeklyGoal) opt.selected = true;
+        goalSelect.appendChild(opt);
+      }
+
+      selectsRow.appendChild(catSelect);
+      selectsRow.appendChild(goalSelect);
+
+      const actionsRow = document.createElement('div');
+      actionsRow.className = 'flex items-center justify-end gap-2';
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.type = 'button';
+      cancelBtn.dataset.action = 'cancel-edit';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.className =
+        'rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700';
+
+      const saveBtn = document.createElement('button');
+      saveBtn.type = 'submit';
+      saveBtn.textContent = 'Save';
+      saveBtn.className = 'accent-bg rounded-xl px-4 py-2 text-xs font-semibold';
+
+      actionsRow.appendChild(cancelBtn);
+      actionsRow.appendChild(saveBtn);
+
+      form.appendChild(nameInput);
+      form.appendChild(selectsRow);
+      form.appendChild(actionsRow);
+      li.appendChild(form);
+      return li;
+    }
+
+    function deleteHabitWithUndo(id) {
+      const index = habits.findIndex((h) => h.id === id);
+      if (index === -1) return;
+      const [removed] = habits.splice(index, 1);
+      lastDeleted = { habit: removed, index };
+      if (editingId === id) editingId = null;
+      saveHabits();
+      renderHabits();
+      showToast(`Deleted "${removed.name}"`, { canUndo: true, duration: 5000 });
+    }
+
+    function renderArchivedDrawer() {
+      const archivedList = getArchivedHabits();
+      if (archivedList.length === 0) {
+        archivedSectionEl.classList.add('hidden');
+        archivedOpen = false;
+        return;
+      }
+
+      archivedSectionEl.classList.remove('hidden');
+      archivedToggleLabelEl.textContent = `Archived habits (${archivedList.length})`;
+      archivedToggleBtn.setAttribute('aria-expanded', String(archivedOpen));
+      archivedChevronEl.classList.toggle('rotate-180', archivedOpen);
+      archivedListEl.classList.toggle('hidden', !archivedOpen);
+
+      archivedListEl.innerHTML = '';
+      archivedList.forEach((habit) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center justify-between gap-2 py-2.5';
+
+        const info = document.createElement('div');
+        info.className = 'min-w-0 flex-1';
+
+        const nameEl = document.createElement('p');
+        nameEl.textContent = habit.name;
+        nameEl.className = 'truncate text-xs font-semibold text-slate-700 dark:text-slate-200';
+
+        const subEl = document.createElement('p');
+        const totalLogs = habit.completedDates.length;
+        subEl.textContent = `${habit.category} · ${totalLogs} total check-in${totalLogs === 1 ? '' : 's'}`;
+        subEl.className = 'mt-0.5 text-[11px] text-slate-400 dark:text-slate-500';
+
+        info.appendChild(nameEl);
+        info.appendChild(subEl);
+
+        const btns = document.createElement('div');
+        btns.className = 'flex shrink-0 items-center gap-1';
+
+        const restoreBtn = document.createElement('button');
+        restoreBtn.type = 'button';
+        restoreBtn.dataset.action = 'restore';
+        restoreBtn.dataset.id = String(habit.id);
+        restoreBtn.textContent = 'Restore';
+        restoreBtn.className = 'accent-pill rounded-lg px-2.5 py-1 text-[11px] font-semibold';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.dataset.action = 'delete';
+        deleteBtn.dataset.id = String(habit.id);
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className =
+          'rounded-lg px-2 py-1 text-[11px] font-semibold text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/60';
+
+        btns.appendChild(restoreBtn);
+        btns.appendChild(deleteBtn);
+
+        li.appendChild(info);
+        li.appendChild(btns);
+        archivedListEl.appendChild(li);
+      });
+    }
+
+    archivedToggleBtn.addEventListener('click', () => {
+      archivedOpen = !archivedOpen;
+      renderArchivedDrawer();
+    });
+
+    archivedListEl.addEventListener('click', (event) => {
+      const btn = event.target.closest('button[data-action]');
+      if (!btn) return;
+      const id = Number(btn.dataset.id);
+      const action = btn.dataset.action;
+
+      if (action === 'restore') {
+        habits = habits.map((h) => (h.id === id ? { ...h, archived: false } : h));
+        saveHabits();
+        renderHabits();
+        showToast('Habit restored');
+      } else if (action === 'delete') {
+        deleteHabitWithUndo(id);
+      }
+    });
+
+    function renderHabits() {
+      const todayKey = getDateKey(new Date());
+      const last7Days = getLastNDays(7);
+      const last7KeysSet = new Set(last7Days.map((d) => d.key));
+      const activeList = getActiveHabits();
+      const visibleHabits = activeFilter === 'All'
+        ? activeList
+        : activeList.filter((h) => h.category === activeFilter);
+
+      renderCategorySelect();
+      renderFilters();
+      habitListEl.innerHTML = '';
+
+      if (visibleHabits.length === 0) {
+        emptyStateEl.classList.remove('hidden');
+        if (activeList.length === 0) {
+          emptyTitleEl.textContent = 'No active habits yet.';
+          emptySubtitleEl.textContent = getArchivedHabits().length > 0
+            ? 'Add a new habit above or restore an archived one below.'
+            : 'Add your first habit above to get started.';
+          resetFilterBtn.classList.add('hidden');
+        } else {
+          emptyTitleEl.textContent = `No ${activeFilter} habits yet.`;
+          emptySubtitleEl.textContent = 'Add one above or switch back to all categories.';
+          resetFilterBtn.classList.remove('hidden');
+        }
+      } else {
+        emptyStateEl.classList.add('hidden');
+      }
+
+      visibleHabits.forEach((habit, visibleIdx) => {
+        if (habit.id === editingId) {
+          habitListEl.appendChild(renderEditCard(habit));
+          return;
+        }
+
+        const isDoneToday = habit.completedDates.includes(todayKey);
+        const streak = getStreak(habit.completedDates);
+        const wkCount = getWeeklyCount(habit.completedDates, last7KeysSet);
+        const goalMet = wkCount >= habit.weeklyGoal;
+        const isFirst = visibleIdx === 0;
+        const isLast = visibleIdx === visibleHabits.length - 1;
+
+        const li = document.createElement('li');
+        li.className = isDoneToday
+          ? 'habit-card accent-card-done rounded-2xl border p-3.5 shadow-sm'
+          : 'habit-card rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700';
+
+        const topRow = document.createElement('div');
+        topRow.className = 'flex items-center gap-2';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.dataset.action = 'toggle-day';
+        toggleBtn.dataset.id = String(habit.id);
+        toggleBtn.dataset.date = todayKey;
+        toggleBtn.setAttribute('aria-pressed', String(isDoneToday));
+        toggleBtn.className = 'flex min-w-0 flex-1 items-center gap-3 text-left focus:outline-none';
+
+        const circle = document.createElement('span');
+        circle.className = isDoneToday
+          ? 'accent-bg flex h-6 w-6 shrink-0 items-center justify-center rounded-full'
+          : 'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900';
+
+        if (isDoneToday) {
+          circle.innerHTML =
+            '<svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M16.704 5.29a1 1 0 010 1.414l-7.5 7.5a1 1 0 01-1.414 0l-3.5-3.5a1 1 0 111.414-1.414l2.793 2.793 6.793-6.793a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
+        }
+
+        const titleBlock = document.createElement('div');
+        titleBlock.className = 'min-w-0 flex-1';
+
+        const label = document.createElement('span');
+        label.textContent = habit.name;
+        label.className = isDoneToday
+          ? 'block truncate text-sm font-semibold text-slate-500 line-through dark:text-slate-400'
+          : 'block truncate text-sm font-semibold text-slate-800 dark:text-slate-100';
+
+        const metaRow = document.createElement('div');
+        metaRow.className = 'mt-1 flex flex-wrap items-center gap-1.5';
+
+        const catBadge = document.createElement('span');
+        catBadge.textContent = habit.category;
+        catBadge.className = `inline-block rounded-md px-2 py-0.5 text-[10px] font-semibold ${getCategoryBadgeClass(habit.category)}`;
+
+        const goalBadge = document.createElement('span');
+        goalBadge.textContent = goalMet
+          ? `✓ ${wkCount}/${habit.weeklyGoal} wk`
+          : `${wkCount}/${habit.weeklyGoal} wk`;
+        goalBadge.className = goalMet
+          ? 'accent-pill inline-block rounded-md px-2 py-0.5 text-[10px] font-semibold'
+          : 'inline-block rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-400';
+
+        metaRow.appendChild(catBadge);
+        metaRow.appendChild(goalBadge);
+        titleBlock.appendChild(label);
+        titleBlock.appendChild(metaRow);
+
+        const streakPill = document.createElement('span');
+        streakPill.textContent = streak > 0 ? `🔥 ${streak}d` : '0d';
+        streakPill.className = streak > 0
+          ? 'shrink-0 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-950/70 dark:text-amber-300'
+          : 'shrink-0 rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400';
+
+        toggleBtn.appendChild(circle);
+        toggleBtn.appendChild(titleBlock);
+        toggleBtn.appendChild(streakPill);
+        topRow.appendChild(toggleBtn);
+
+        // 7-day mini calendar
+        const calendarRow = document.createElement('div');
+        calendarRow.className = 'mt-3 grid grid-cols-7 gap-1.5 border-t border-slate-100 pt-2.5 dark:border-slate-800';
+
+        last7Days.forEach((day) => {
+          const dayDone = habit.completedDates.includes(day.key);
+          const dayBtn = document.createElement('button');
+          dayBtn.type = 'button';
+          dayBtn.dataset.action = 'toggle-day';
+          dayBtn.dataset.id = String(habit.id);
+          dayBtn.dataset.date = day.key;
+          dayBtn.setAttribute('aria-pressed', String(dayDone));
+          dayBtn.setAttribute('aria-label', `${habit.name} on ${day.key}`);
+
+          const baseClasses =
+            'flex flex-col items-center justify-center rounded-xl py-1.5 text-xs transition focus:outline-none';
+          if (dayDone) {
+            dayBtn.className = `${baseClasses} accent-bg font-semibold`;
+          } else if (day.isToday) {
+            dayBtn.className = `${baseClasses} accent-today-outline border font-semibold`;
+          } else {
+            dayBtn.className = `${baseClasses} bg-slate-100/80 text-slate-500 hover:bg-slate-200/70 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700`;
+          }
+
+          const wdSpan = document.createElement('span');
+          wdSpan.textContent = day.weekday;
+          wdSpan.className = 'text-[10px] leading-none opacity-80';
+
+          const numSpan = document.createElement('span');
+          numSpan.textContent = String(day.dayNum);
+          numSpan.className = 'mt-1 text-xs leading-none';
+
+          dayBtn.appendChild(wdSpan);
+          dayBtn.appendChild(numSpan);
+          calendarRow.appendChild(dayBtn);
+        });
+
+        // Card utility footer
+        const actionRow = document.createElement('div');
+        actionRow.className = 'mt-2.5 flex items-center justify-between border-t border-slate-100 pt-2 dark:border-slate-800/80';
+
+        const reorderGroup = document.createElement('div');
+        reorderGroup.className = 'flex items-center gap-1';
+
+        const upBtn = document.createElement('button');
+        upBtn.type = 'button';
+        upBtn.dataset.action = 'move-up';
+        upBtn.dataset.id = String(habit.id);
+        upBtn.disabled = isFirst;
+        upBtn.setAttribute('aria-label', `Move ${habit.name} up`);
+        upBtn.title = 'Move up';
+        upBtn.className = isFirst
+          ? 'flex h-7 w-7 cursor-not-allowed items-center justify-center rounded-lg text-slate-300 dark:text-slate-700'
+          : 'flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200';
+        upBtn.innerHTML =
+          '<svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 17a.75.75 0 01-.75-.75V5.612L5.29 9.77a.75.75 0 01-1.08-1.04l5.25-5.5a.75.75 0 011.08 0l5.25 5.5a.75.75 0 11-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0110 17z" clip-rule="evenodd" /></svg>';
+
+        const downBtn = document.createElement('button');
+        downBtn.type = 'button';
+        downBtn.dataset.action = 'move-down';
+        downBtn.dataset.id = String(habit.id);
+        downBtn.disabled = isLast;
+        downBtn.setAttribute('aria-label', `Move ${habit.name} down`);
+        downBtn.title = 'Move down';
+        downBtn.className = isLast
+          ? 'flex h-7 w-7 cursor-not-allowed items-center justify-center rounded-lg text-slate-300 dark:text-slate-700'
+          : 'flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200';
+        downBtn.innerHTML =
+          '<svg class="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 3a.75.75 0 01.75.75v10.638l3.96-4.158a.75.75 0 111.08 1.04l-5.25 5.5a.75.75 0 01-1.08 0l-5.25-5.5a.75.75 0 111.08-1.04l3.96 4.158V3.75A.75.75 0 0110 3z" clip-rule="evenodd" /></svg>';
+
+        reorderGroup.appendChild(upBtn);
+        reorderGroup.appendChild(downBtn);
+
+        const manageGroup = document.createElement('div');
+        manageGroup.className = 'flex items-center gap-1';
+
+        const editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.dataset.action = 'edit';
+        editBtn.dataset.id = String(habit.id);
+        editBtn.setAttribute('aria-label', `Edit ${habit.name}`);
+        editBtn.textContent = 'Edit';
+        editBtn.className =
+          'rounded-lg px-2 py-1 text-[11px] font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200';
+
+        const archiveBtn = document.createElement('button');
+        archiveBtn.type = 'button';
+        archiveBtn.dataset.action = 'archive';
+        archiveBtn.dataset.id = String(habit.id);
+        archiveBtn.setAttribute('aria-label', `Archive ${habit.name}`);
+        archiveBtn.textContent = 'Archive';
+        archiveBtn.className =
+          'rounded-lg px-2 py-1 text-[11px] font-semibold text-amber-600 transition hover:bg-amber-50 hover:text-amber-700 dark:text-amber-400 dark:hover:bg-amber-950/60';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.dataset.action = 'delete';
+        deleteBtn.dataset.id = String(habit.id);
+        deleteBtn.setAttribute('aria-label', `Delete ${habit.name}`);
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.className =
+          'rounded-lg px-2 py-1 text-[11px] font-semibold text-rose-500 transition hover:bg-rose-50 hover:text-rose-700 dark:text-rose-400 dark:hover:bg-rose-950/60';
+
+        const timerBtn = document.createElement('button');
+        timerBtn.type = 'button';
+        timerBtn.dataset.action = 'open-timer';
+        timerBtn.dataset.id = String(habit.id);
+        timerBtn.setAttribute('aria-label', `Start focus timer for ${habit.name}`);
+        timerBtn.textContent = 'Timer';
+        timerBtn.className =
+          'accent-text rounded-lg px-2 py-1 text-[11px] font-semibold transition hover:bg-slate-100 dark:hover:bg-slate-800';
+
+        manageGroup.appendChild(timerBtn);
+        manageGroup.appendChild(editBtn);
+        manageGroup.appendChild(archiveBtn);
+        manageGroup.appendChild(deleteBtn);
+
+        actionRow.appendChild(reorderGroup);
+        actionRow.appendChild(manageGroup);
+
+        li.appendChild(topRow);
+        li.appendChild(calendarRow);
+        li.appendChild(actionRow);
+        habitListEl.appendChild(li);
+      });
+
+      if (editingId !== null) {
+        const editInput = habitListEl.querySelector('input[name="editName"]');
+        if (editInput) {
+          editInput.focus();
+          editInput.select();
+        }
+      }
+
+      renderArchivedDrawer();
+      updateProgress(todayKey);
+      if (activeView === 'summary') {
+        renderWeeklySummary();
+      }
+    }
+
+    function updateProgress(todayKey) {
+      const activeList = getActiveHabits();
+      const total = activeList.length;
+      const completed = activeList.filter((h) => h.completedDates.includes(todayKey)).length;
+      const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+      const bestStreak = activeList.reduce((max, h) => Math.max(max, getStreak(h.completedDates)), 0);
+
+      progressTextEl.textContent = `${completed} of ${total} completed`;
+      bestStreakBadgeEl.textContent = `Best: ${bestStreak}d`;
+      progressPercentEl.textContent = `${percent}%`;
+      progressBarEl.style.width = `${percent}%`;
+
+      if (total > 0 && completed === total) {
+        allDoneBannerEl.classList.remove('hidden');
+      } else {
+        allDoneBannerEl.classList.add('hidden');
+      }
+    }
+
+    // 10. RENDER WEEKLY SUMMARY + 30-DAY HEATMAP
+    function getHeatmapClass(doneCount, referenceTotal) {
+      if (doneCount === 0 || referenceTotal === 0) {
+        return 'bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500';
+      }
+      const ratio = doneCount / referenceTotal;
+      if (ratio >= 0.85) return 'heat-3';
+      if (ratio >= 0.5) return 'heat-2';
+      return 'heat-1';
+    }
+
+    function computeBadges() {
+      const totalCheckins = habits.reduce((sum, h) => sum + h.completedDates.length, 0);
+      const bestStreakEver = habits.reduce((max, h) => Math.max(max, getLongestStreak(h.completedDates)), 0);
+      const noteCount = Object.values(dailyNotes).filter((v) => typeof v === 'string' && v.trim().length > 0).length;
+
+      const activeList = getActiveHabits();
+      const todayKey = getDateKey(new Date());
+      const perfectToday = activeList.length > 0 && activeList.every((h) => h.completedDates.includes(todayKey));
+
+      // Also check if any date in history had >= activeList.length check-ins
+      let hasPerfectDay = perfectToday;
+      if (!hasPerfectDay && activeList.length > 0) {
+        const countsByDate = {};
+        habits.forEach((h) => {
+          h.completedDates.forEach((d) => {
+            countsByDate[d] = (countsByDate[d] || 0) + 1;
+          });
+        });
+        hasPerfectDay = Object.values(countsByDate).some((c) => c >= activeList.length);
+      }
+
+      return [
+        {
+          id: 'first_step',
+          icon: '🌱',
+          title: 'First Step',
+          desc: 'Log your first check-in',
+          unlocked: totalCheckins >= 1,
+          progress: `${Math.min(totalCheckins, 1)}/1`
+        },
+        {
+          id: 'perfect_day',
+          icon: '⭐',
+          title: 'Perfect Day',
+          desc: 'Complete all active habits in a day',
+          unlocked: hasPerfectDay,
+          progress: hasPerfectDay ? 'Done' : '0/1'
+        },
+        {
+          id: 'streak_3',
+          icon: '🔥',
+          title: '3-Day Spark',
+          desc: 'Reach a 3-day streak',
+          unlocked: bestStreakEver >= 3,
+          progress: `${Math.min(bestStreakEver, 3)}/3d`
+        },
+        {
+          id: 'streak_7',
+          icon: '🏆',
+          title: '7-Day Warrior',
+          desc: 'Reach a 7-day streak',
+          unlocked: bestStreakEver >= 7,
+          progress: `${Math.min(bestStreakEver, 7)}/7d`
+        },
+        {
+          id: 'checkins_25',
+          icon: '🎯',
+          title: 'Habit Builder',
+          desc: 'Log 25 total check-ins',
+          unlocked: totalCheckins >= 25,
+          progress: `${Math.min(totalCheckins, 25)}/25`
+        },
+        {
+          id: 'notes_3',
+          icon: '📝',
+          title: 'Reflective Mind',
+          desc: 'Write 3 daily reflections',
+          unlocked: noteCount >= 3,
+          progress: `${Math.min(noteCount, 3)}/3`
+        }
+      ];
+    }
+
+    function checkNewBadgeUnlocks(announce = true) {
+      const badges = computeBadges();
+      let newlyUnlocked = null;
+      let changed = false;
+
+      badges.forEach((b) => {
+        if (b.unlocked && !seenBadges.has(b.id)) {
+          seenBadges.add(b.id);
+          changed = true;
+          if (!newlyUnlocked) newlyUnlocked = b;
+        }
+      });
+
+      if (changed) {
+        saveSeenBadges(seenBadges);
+        if (announce && newlyUnlocked) {
+          showToast(`${newlyUnlocked.icon} Badge unlocked: ${newlyUnlocked.title}!`, { duration: 3200 });
+        }
+      }
+      return badges;
+    }
+
+    function renderBadges() {
+      const badges = computeBadges();
+      const unlockedCount = badges.filter((b) => b.unlocked).length;
+      badgesCountEl.textContent = `${unlockedCount}/${badges.length} unlocked`;
+
+      badgesGridEl.innerHTML = '';
+      badges.forEach((b) => {
+        const card = document.createElement('div');
+        card.className = b.unlocked
+          ? 'accent-card-done rounded-xl border p-3 transition'
+          : 'rounded-xl border border-slate-200 bg-slate-50/70 p-3 opacity-65 dark:border-slate-800 dark:bg-slate-800/40';
+
+        const top = document.createElement('div');
+        top.className = 'flex items-center justify-between gap-1';
+
+        const iconEl = document.createElement('span');
+        iconEl.textContent = b.icon;
+        iconEl.className = b.unlocked ? 'text-lg leading-none' : 'text-lg leading-none grayscale';
+
+        const progEl = document.createElement('span');
+        progEl.textContent = b.unlocked ? 'Unlocked' : b.progress;
+        progEl.className = b.unlocked
+          ? 'accent-pill rounded-md px-1.5 py-0.5 text-[10px] font-semibold'
+          : 'rounded-md bg-slate-200/80 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500 dark:bg-slate-700 dark:text-slate-300';
+
+        top.appendChild(iconEl);
+        top.appendChild(progEl);
+
+        const titleEl = document.createElement('p');
+        titleEl.textContent = b.title;
+        titleEl.className = 'mt-2 text-xs font-bold text-slate-800 dark:text-slate-100';
+
+        const descEl = document.createElement('p');
+        descEl.textContent = b.desc;
+        descEl.className = 'mt-0.5 text-[11px] leading-snug text-slate-500 dark:text-slate-400';
+
+        card.appendChild(top);
+        card.appendChild(titleEl);
+        card.appendChild(descEl);
+        badgesGridEl.appendChild(card);
+      });
+    }
+
+    function renderWeeklySummary() {
+      const last7Days = getLastNDays(7);
+      const last30Days = getLastNDays(30);
+      const last7KeysSet = new Set(last7Days.map((d) => d.key));
+      const activeList = getActiveHabits();
+
+      const totalCheckins = habits.reduce((sum, h) => sum + getWeeklyCount(h.completedDates, last7KeysSet), 0);
+
+      let totalGoalTarget = 0;
+      let cappedCheckins = 0;
+      let goalsMetCount = 0;
+
+      activeList.forEach((h) => {
+        const count = getWeeklyCount(h.completedDates, last7KeysSet);
+        totalGoalTarget += h.weeklyGoal;
+        cappedCheckins += Math.min(count, h.weeklyGoal);
+        if (count >= h.weeklyGoal) goalsMetCount += 1;
+      });
+
+      const goalRate = totalGoalTarget > 0 ? Math.round((cappedCheckins / totalGoalTarget) * 100) : 0;
+
+      summaryCheckinsEl.textContent = String(totalCheckins);
+      summaryGoalsMetEl.textContent = `${goalsMetCount}/${activeList.length}`;
+      summaryRateEl.textContent = `${goalRate}%`;
+
+      // 7-day bar chart
+      weeklyChartEl.innerHTML = '';
+      const dayCounts7 = last7Days.map((day) => habits.filter((h) => h.completedDates.includes(day.key)).length);
+      const maxPerDay = Math.max(activeList.length, ...dayCounts7, 1);
+
+      last7Days.forEach((day, idx) => {
+        const doneCount = dayCounts7[idx];
+        const heightPct = Math.round((doneCount / maxPerDay) * 100);
+
+        const col = document.createElement('div');
+        col.className = 'flex h-full flex-col items-center justify-end gap-1.5';
+
+        const valLabel = document.createElement('span');
+        valLabel.textContent = String(doneCount);
+        valLabel.className = 'text-[11px] font-semibold text-slate-500 dark:text-slate-400';
+
+        const track = document.createElement('div');
+        track.className = 'flex h-24 w-full items-end overflow-hidden rounded-lg bg-slate-100 p-0.5 dark:bg-slate-800';
+
+        const bar = document.createElement('div');
+        bar.style.height = `${doneCount > 0 ? Math.max(heightPct, 12) : 0}%`;
+        bar.className = day.isToday
+          ? 'accent-bar w-full rounded-md transition-all duration-300'
+          : 'accent-bar w-full rounded-md opacity-75 transition-all duration-300';
+
+        track.appendChild(bar);
+
+        const dayLabel = document.createElement('span');
+        dayLabel.textContent = day.shortDay.slice(0, 2);
+        dayLabel.className = day.isToday
+          ? 'accent-text text-[11px] font-bold'
+          : 'text-[11px] font-medium text-slate-400 dark:text-slate-500';
+
+        col.appendChild(valLabel);
+        col.appendChild(track);
+        col.appendChild(dayLabel);
+        weeklyChartEl.appendChild(col);
+      });
+
+      // 30-day heatmap
+      heatmapGridEl.innerHTML = '';
+      const refTotal = Math.max(activeList.length, 1);
+      last30Days.forEach((day) => {
+        const doneCount = habits.filter((h) => h.completedDates.includes(day.key)).length;
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.dataset.heatmapKey = day.key;
+        cell.dataset.heatmapLabel = `${day.isToday ? 'Today' : day.niceDate}: ${doneCount} check-in${doneCount === 1 ? '' : 's'}`;
+        cell.title = cell.dataset.heatmapLabel;
+        cell.setAttribute('aria-label', cell.dataset.heatmapLabel);
+        cell.textContent = String(day.dayNum);
+
+        const isSelected = selectedHeatmapKey === day.key;
+        const ringClass = isSelected
+          ? 'ring-2 ring-slate-900 ring-offset-1 dark:ring-white dark:ring-offset-slate-900'
+          : day.isToday
+            ? 'ring-1 ring-slate-400 dark:ring-slate-500'
+            : '';
+
+        cell.className = `flex aspect-square items-center justify-center rounded-lg text-[10px] font-semibold transition ${getHeatmapClass(doneCount, refTotal)} ${ringClass}`;
+        heatmapGridEl.appendChild(cell);
+
+        if (isSelected) {
+          heatmapDetailEl.textContent = cell.dataset.heatmapLabel;
+        }
+      });
+
+      // Per-habit goal breakdown
+      summaryHabitListEl.innerHTML = '';
+      if (activeList.length === 0) {
+        summaryEmptyEl.classList.remove('hidden');
+      } else {
+        summaryEmptyEl.classList.add('hidden');
+        activeList.forEach((habit) => {
+          const wkCount = getWeeklyCount(habit.completedDates, last7KeysSet);
+          const pct = Math.min(100, Math.round((wkCount / habit.weeklyGoal) * 100));
+          const met = wkCount >= habit.weeklyGoal;
+
+          const li = document.createElement('li');
+
+          const header = document.createElement('div');
+          header.className = 'flex items-center justify-between gap-2 text-xs';
+
+          const left = document.createElement('div');
+          left.className = 'flex min-w-0 items-center gap-2';
+
+          const nameEl = document.createElement('span');
+          nameEl.textContent = habit.name;
+          nameEl.className = 'truncate font-semibold text-slate-700 dark:text-slate-200';
+
+          const catEl = document.createElement('span');
+          catEl.textContent = habit.category;
+          catEl.className = `shrink-0 rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${getCategoryBadgeClass(habit.category)}`;
+
+          left.appendChild(nameEl);
+          left.appendChild(catEl);
+
+          const right = document.createElement('span');
+          right.textContent = met ? `✓ ${wkCount}/${habit.weeklyGoal}` : `${wkCount}/${habit.weeklyGoal}`;
+          right.className = met
+            ? 'accent-text shrink-0 font-bold'
+            : 'shrink-0 font-medium text-slate-500 dark:text-slate-400';
+
+          header.appendChild(left);
+          header.appendChild(right);
+
+          const barTrack = document.createElement('div');
+          barTrack.className = 'mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800';
+
+          const barFill = document.createElement('div');
+          barFill.style.width = `${pct}%`;
+          barFill.className = met
+            ? 'accent-bar h-full rounded-full transition-all duration-300'
+            : 'h-full rounded-full bg-amber-400 transition-all duration-300 dark:bg-amber-500';
+
+          barTrack.appendChild(barFill);
+          li.appendChild(header);
+          li.appendChild(barTrack);
+          summaryHabitListEl.appendChild(li);
+        });
+      }
+
+      renderBadges();
+
+      // Recent Reflections
+      summaryNotesListEl.innerHTML = '';
+      const recentNotes = [...last7Days]
+        .reverse()
+        .filter((day) => dailyNotes[day.key] && dailyNotes[day.key].trim().length > 0);
+
+      if (recentNotes.length === 0) {
+        summaryNotesEmptyEl.classList.remove('hidden');
+      } else {
+        summaryNotesEmptyEl.classList.add('hidden');
+        recentNotes.forEach((day) => {
+          const li = document.createElement('li');
+          li.className = 'rounded-xl bg-slate-50 p-3 dark:bg-slate-800/60';
+
+          const dateHeader = document.createElement('p');
+          dateHeader.textContent = day.isToday ? `Today (${day.niceDate})` : day.niceDate;
+          dateHeader.className = 'accent-text text-[11px] font-semibold';
+
+          const body = document.createElement('p');
+          body.textContent = dailyNotes[day.key];
+          body.className = 'mt-1 whitespace-pre-wrap text-xs text-slate-700 dark:text-slate-200';
+
+          li.appendChild(dateHeader);
+          li.appendChild(body);
+          summaryNotesListEl.appendChild(li);
+        });
+      }
+    }
+
+    heatmapGridEl.addEventListener('click', (event) => {
+      const cell = event.target.closest('button[data-heatmap-key]');
+      if (!cell) return;
+      selectedHeatmapKey = cell.dataset.heatmapKey;
+      heatmapDetailEl.textContent = cell.dataset.heatmapLabel;
+      renderWeeklySummary();
+    });
+
+    // 11. INTERACTIONS
+    function toggleHabitDate(id, dateKey) {
+      habits = habits.map((habit) => {
+        if (habit.id !== id) return habit;
+        const exists = habit.completedDates.includes(dateKey);
+        const updatedDates = exists
+          ? habit.completedDates.filter((d) => d !== dateKey)
+          : [...habit.completedDates, dateKey];
+        return { ...habit, completedDates: updatedDates };
+      });
+    }
+
+    function moveHabit(id, direction) {
+      const visibleIndices = [];
+      habits.forEach((h, idx) => {
+        if (!h.archived && (activeFilter === 'All' || h.category === activeFilter)) {
+          visibleIndices.push(idx);
+        }
+      });
+
+      const currentPos = visibleIndices.findIndex((idx) => habits[idx].id === id);
+      if (currentPos === -1) return;
+
+      const targetPos = direction === 'up' ? currentPos - 1 : currentPos + 1;
+      if (targetPos < 0 || targetPos >= visibleIndices.length) return;
+
+      const idxA = visibleIndices[currentPos];
+      const idxB = visibleIndices[targetPos];
+      const temp = habits[idxA];
+      habits[idxA] = habits[idxB];
+      habits[idxB] = temp;
+    }
+
+    filterBarEl.addEventListener('click', (event) => {
+      const newCatBtn = event.target.closest('button[data-action="open-new-cat"]');
+      if (newCatBtn) {
+        const isHidden = customCatForm.classList.contains('hidden');
+        customCatForm.classList.toggle('hidden', !isHidden);
+        customCatForm.classList.toggle('flex', isHidden);
+        if (isHidden) customCatInput.focus();
+        return;
+      }
+
+      const btn = event.target.closest('button[data-filter]');
+      if (!btn) return;
+      activeFilter = btn.dataset.filter;
+      editingId = null;
+      renderHabits();
+    });
+
+    resetFilterBtn.addEventListener('click', () => {
+      activeFilter = 'All';
+      renderHabits();
+    });
+
+    habitListEl.addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button || button.disabled) return;
+
+      const action = button.dataset.action;
+
+      if (action === 'cancel-edit') {
+        editingId = null;
+        renderHabits();
+        return;
+      }
+
+      const id = Number(button.dataset.id);
+
+      if (action === 'toggle-day') {
+        toggleHabitDate(id, button.dataset.date);
+        saveHabits();
+        renderHabits();
+        checkNewBadgeUnlocks(true);
+      } else if (action === 'move-up') {
+        moveHabit(id, 'up');
+        saveHabits();
+        renderHabits();
+      } else if (action === 'move-down') {
+        moveHabit(id, 'down');
+        saveHabits();
+        renderHabits();
+      } else if (action === 'open-timer') {
+        openTimerForHabit(id);
+      } else if (action === 'edit') {
+        editingId = id;
+        renderHabits();
+      } else if (action === 'archive') {
+        habits = habits.map((habit) => (habit.id === id ? { ...habit, archived: true } : habit));
+        if (editingId === id) editingId = null;
+        saveHabits();
+        renderHabits();
+        showToast('Habit archived — history kept');
+      } else if (action === 'delete') {
+        deleteHabitWithUndo(id);
+      }
+    });
+
+    habitListEl.addEventListener('submit', (event) => {
+      const form = event.target.closest('form[data-edit-form]');
+      if (!form) return;
+      event.preventDefault();
+
+      const id = Number(form.dataset.editForm);
+      const nameVal = form.elements.editName.value.trim();
+      const categoryVal = form.elements.editCategory.value;
+      const goalVal = clampGoal(form.elements.editGoal.value);
+
+      if (!nameVal) {
+        showToast('Habit name cannot be empty');
+        form.elements.editName.focus();
+        return;
+      }
+
+      habits = habits.map((habit) =>
+        habit.id === id ? { ...habit, name: nameVal, category: categoryVal, weeklyGoal: goalVal } : habit
+      );
+      editingId = null;
+      saveHabits();
+      renderHabits();
+      showToast('Habit updated');
+    });
+
+    habitListEl.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && editingId !== null) {
+        editingId = null;
+        renderHabits();
+      }
+    });
+
+    habitForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = habitInput.value.trim();
+
+      if (!name) {
+        formErrorEl.classList.remove('hidden');
+        habitInput.focus();
+        return;
+      }
+
+      formErrorEl.classList.add('hidden');
+      const category = habitCategorySelect.value;
+      const weeklyGoal = clampGoal(habitGoalSelect.value);
+      habits.push({
+        id: Date.now(),
+        name,
+        category,
+        weeklyGoal,
+        archived: false,
+        completedDates: []
+      });
+
+      habitInput.value = '';
+      if (activeFilter !== 'All' && activeFilter !== category) {
+        activeFilter = 'All';
+      }
+      saveHabits();
+      renderHabits();
+      showToast('Habit added');
+    });
+
+    habitInput.addEventListener('input', () => {
+      if (!formErrorEl.classList.contains('hidden')) {
+        formErrorEl.classList.add('hidden');
+      }
+    });
+
+    // 12. EXPORT & IMPORT JSON BACKUP
+    exportBtn.addEventListener('click', () => {
+      const payload = {
+        app: 'Daily Habit Tracker',
+        version: 12,
+        exportedAt: new Date().toISOString(),
+        categories,
+        habits,
+        notes: dailyNotes
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `habit-tracker-backup-${getDateKey(new Date())}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('Backup JSON downloaded');
+    });
+
+    importBtn.addEventListener('click', () => {
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener('change', (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || ''));
+          const rawList = Array.isArray(parsed) ? parsed : Array.isArray(parsed.habits) ? parsed.habits : null;
+          if (!rawList) {
+            showToast('Invalid backup file format');
+            return;
+          }
+
+          if (parsed && Array.isArray(parsed.categories)) {
+            const extra = parsed.categories.map((c) => String(c).trim()).filter(Boolean);
+            categories = [...new Set([...DEFAULT_CATEGORIES, ...extra])];
+          }
+
+          const imported = rawList.map((item, i) => normalizeHabit(item, i)).filter((h) => h.name.length > 0);
+          habits = imported;
+          saveCategories();
+
+          if (parsed && typeof parsed.notes === 'object' && !Array.isArray(parsed.notes) && parsed.notes !== null) {
+            dailyNotes = { ...parsed.notes };
+            saveNotes();
+            initTodayNote();
+          }
+
+          activeFilter = 'All';
+          editingId = null;
+          saveHabits();
+          renderHabits();
+          showToast(`Imported ${imported.length} habit${imported.length === 1 ? '' : 's'}`);
+        } catch (err) {
+          showToast('Could not read that JSON file');
+        }
+      };
+      reader.readAsText(file);
+      importFileInput.value = '';
+    });
+
+    // 12B. FOCUS TIMER
+    let timerHabitId = null;
+    let timerTotalSec = 600;
+    let timerRemainingSec = 600;
+    let timerInterval = null;
+
+    function detectMinutesFromName(name) {
+      const match = String(name || '').match(/(\d{1,3})\s*(?:min|minute|minutes|m)\b/i);
+      if (match) {
+        const mins = Number(match[1]);
+        if (mins >= 1 && mins <= 120) return mins;
+      }
+      return 10;
+    }
+
+    function formatClock(seconds) {
+      const m = Math.floor(seconds / 60);
+      const s = seconds % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function playCompletionChime() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.18);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.45);
+      } catch (err) {
+        // Audio optional
+      }
+    }
+
+    function stopTimerInterval() {
+      if (timerInterval !== null) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      timerStartBtn.textContent = 'Start';
+    }
+
+    function updateTimerUI() {
+      timerDisplayEl.textContent = formatClock(timerRemainingSec);
+      const pct = timerTotalSec > 0 ? Math.round((timerRemainingSec / timerTotalSec) * 100) : 0;
+      timerBarEl.style.width = `${pct}%`;
+    }
+
+    function openTimerForHabit(id) {
+      const habit = habits.find((h) => h.id === id);
+      if (!habit) return;
+      stopTimerInterval();
+      timerHabitId = id;
+      const mins = detectMinutesFromName(habit.name);
+      timerTotalSec = mins * 60;
+      timerRemainingSec = timerTotalSec;
+      timerHabitNameEl.textContent = habit.name;
+      timerCardEl.classList.remove('hidden');
+      updateTimerUI();
+      timerCardEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    timerStartBtn.addEventListener('click', () => {
+      if (timerInterval !== null) {
+        stopTimerInterval();
+        return;
+      }
+      if (timerRemainingSec <= 0) {
+        timerRemainingSec = timerTotalSec;
+      }
+      timerStartBtn.textContent = 'Pause';
+      timerInterval = setInterval(() => {
+        timerRemainingSec -= 1;
+        updateTimerUI();
+        if (timerRemainingSec <= 0) {
+          stopTimerInterval();
+          playCompletionChime();
+          const target = habits.find((h) => h.id === timerHabitId);
+          if (target) {
+            const todayKey = getDateKey(new Date());
+            if (!target.completedDates.includes(todayKey)) {
+              toggleHabitDate(target.id, todayKey);
+              saveHabits();
+              renderHabits();
+              checkNewBadgeUnlocks(true);
+            }
+            showToast(`⏱️ Time's up! Marked "${target.name}" done`, { duration: 3500 });
+          } else {
+            showToast("⏱️ Focus session complete!");
+          }
+        }
+      }, 1000);
+    });
+
+    timerResetBtn.addEventListener('click', () => {
+      stopTimerInterval();
+      timerRemainingSec = timerTotalSec;
+      updateTimerUI();
+    });
+
+    timerCloseBtn.addEventListener('click', () => {
+      stopTimerInterval();
+      timerHabitId = null;
+      timerCardEl.classList.add('hidden');
+    });
+
+    timerPresetsEl.addEventListener('click', (event) => {
+      const btn = event.target.closest('button[data-minutes]');
+      if (!btn) return;
+      stopTimerInterval();
+      const mins = Number(btn.dataset.minutes);
+      timerTotalSec = mins * 60;
+      timerRemainingSec = timerTotalSec;
+      updateTimerUI();
+    });
+
+    // 12C. EXPORT CSV SPREADSHEET
+    function escapeCsv(value) {
+      const str = String(value);
+      if (/[",\n]/.test(str)) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    }
+
+    exportCsvBtn.addEventListener('click', () => {
+      const last7KeysSet = new Set(getLastNDays(7).map((d) => d.key));
+      const rows = [
+        ['Habit', 'Category', 'Weekly Goal', 'Status', 'Current Streak', 'Longest Streak', 'Last 7 Days', 'Total Check-ins']
+      ];
+      habits.forEach((h) => {
+        rows.push([
+          h.name,
+          h.category,
+          `${h.weeklyGoal}x/week`,
+          h.archived ? 'Archived' : 'Active',
+          getStreak(h.completedDates),
+          getLongestStreak(h.completedDates),
+          getWeeklyCount(h.completedDates, last7KeysSet),
+          h.completedDates.length
+        ]);
+      });
+      const csvContent = rows.map((row) => row.map(escapeCsv).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `habit-tracker-report-${getDateKey(new Date())}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      showToast('CSV report downloaded');
+    });
+
+    // Initialize app
+    initTheme();
+    initAccent();
+    initTodayNote();
+    checkNewBadgeUnlocks(false);
+    renderHabits();
+  </script>
+</body>
+</html>
